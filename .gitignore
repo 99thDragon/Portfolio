@@ -12,3 +12,6 @@ Thumbs.db
 
 # Sensitive
 .env
+
+# Claude Code
+CLAUDE.md
