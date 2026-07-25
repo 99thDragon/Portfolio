@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>42 Paper Planes | Erasmo Concepcion</title>
+    <meta name="description"
+        content="42 Paper Planes — an interactive data visualization of Erasmo Concepcion's job search: 42 applications, one landed offer.">
+    <meta name="theme-color" content="#4A25FF">
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23E9E7E2'/%3E%3Ctext x='50' y='72' font-family='Arial,sans-serif' font-size='62' font-weight='800' fill='%234A25FF' text-anchor='middle'%3EE%3C/text%3E%3Ccircle cx='82' cy='24' r='9' fill='%234A25FF'/%3E%3C/svg%3E">
+    <style>
+        :root {
+            --ink: #0B0B0B;
+            --ink-soft: #4A4A48;
+            --ink-muted: #8B8A86;
+            --accent: #4A25FF;
+            --surface: #E9E7E2;
+            /* warm paper grey — matches the portfolio */
+            --line: #C9C7C1;
+            --tile: #EFEEEA;
+
+            /* sequential stage scale: muted grey-violet → electric indigo */
+            --stage-none: #8B88A0;
+            --stage-reply: #6E62C9;
+            --stage-interview: #5A3CEC;
+            --stage-offer: #4A25FF;
+
+            --font: "Helvetica Neue", "Arial Nova", Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font);
+            color: var(--ink);
+            background: var(--surface);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        /* ---- top bar (ties back to the portfolio) ---- */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px clamp(20px, 5vw, 48px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .topbar .brand {
+            display: inline-flex;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .topbar .brand-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            margin-right: 9px;
+        }
+
+        .topbar .back {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            text-decoration: none;
+            transition: color 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .topbar .back:hover {
+            color: var(--accent);
+        }
+
+        .viz-wrap {
+            max-width: 1060px;
+            margin: 0 auto;
+            padding: clamp(36px, 6vw, 64px) clamp(20px, 5vw, 48px) 72px;
+        }
+
+        .eyebrow {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 1.25rem;
+        }
+
+        .eyebrow .eb-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            margin-right: 9px;
+        }
+
+        .viz-header h1 {
+            font-size: clamp(2.2rem, 7vw, 4.5rem);
+            font-weight: 800;
+            line-height: 0.98;
+            letter-spacing: -0.03em;
+        }
+
+        .viz-header p.sub {
+            color: var(--ink-soft);
+            max-width: 620px;
+            margin-top: 1rem;
+            font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+        }
+
+        .stat-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 34px 0 8px;
+        }
+
+        .stat-tile {
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 16px 16px;
+            background: var(--tile);
+        }
+
+        .stat-tile .num {
+            display: flex;
+            align-items: center;
+            font-size: 1.9rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-tile .lbl {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-top: 4px;
+        }
+
+        .stat-tile .pct {
+            font-size: 0.7rem;
+            color: var(--ink-muted);
+        }
+
+        .stat-tile .swatch {
+            display: inline-block;
+            width: 11px;
+            height: 11px;
+            border-radius: 3px;
+            margin-right: 8px;
+        }
+
+        figure.sky {
+            margin: 10px 0 0;
+            position: relative;
+        }
+
+        figure.sky svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 4px;
+            border: 1px solid var(--line);
+        }
+
+        .tooltip {
+            position: absolute;
+            pointer-events: none;
+            background: var(--ink);
+            color: var(--surface);
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 6px 11px;
+            border-radius: 100px;
+            white-space: nowrap;
+            transform: translate(-50%, -130%);
+            opacity: 0;
+            transition: opacity 0.12s;
+            z-index: 5;
+        }
+
+        .tooltip.on {
+            opacity: 1;
+        }
+
+        figcaption {
+            font-size: 0.78rem;
+            color: var(--ink-muted);
+            margin-top: 12px;
+        }
+
+        details.data-table {
+            margin-top: 24px;
+        }
+
+        details.data-table summary {
+            cursor: pointer;
+            color: var(--accent);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        details.data-table table {
+            border-collapse: collapse;
+            margin-top: 14px;
+            font-size: 0.88rem;
+        }
+
+        details.data-table th,
+        details.data-table td {
+            border: 1px solid var(--line);
+            padding: 7px 14px;
+            text-align: left;
+        }
+
+        details.data-table th {
+            background: var(--tile);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-size: 0.78rem;
+        }
+
+        .credit {
+            margin-top: 32px;
+            font-size: 0.75rem;
+            color: var(--ink-muted);
+            max-width: 620px;
+        }
+
+        .credit a {
+            color: var(--accent);
+        }
+
+        @media (max-width: 640px) {
+            .stat-strip {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <a class="brand" href="index.html"><span class="brand-dot"></span>Erasmo Concepcion</a>
+        <a class="back" href="index.html">← Back to portfolio</a>
+    </header>
+
+    <div class="viz-wrap">
+        <header class="viz-header">
+            <p class="eyebrow"><span class="eb-dot"></span>The Road Here</p>
+            <h1>42 Paper Planes</h1>
+            <p class="sub">My last three months of job applications. Every application is a paper
+                plane I folded and threw &mdash; how far it flew is how far it got. Most fell out of
+                the sky unanswered. One landed.</p>
+        </header>
+
+        <div class="stat-strip" id="stat-strip"></div>
+
+        <figure class="sky">
+            <svg id="sky-svg" viewBox="0 0 1000 560" role="img"
+                aria-label="Unit chart of 42 job applications drawn as paper planes. 31 got no reply, 6 got a reply but no interview, 4 reached interviews without an offer, and 1 ended in an accepted offer.">
+            </svg>
+            <div class="tooltip" id="tooltip"></div>
+            <figcaption>Each plane is one real application. Stages are nested: every interview came
+                from a reply, and the offer came from an interview. Plane order and flight paths are
+                decorative; the landing zone is the data. Hover a plane or trail for its outcome.
+            </figcaption>
+        </figure>
+
+        <details class="data-table">
+            <summary>View the numbers as a table</summary>
+            <table id="outcome-table">
+                <thead>
+                    <tr>
+                        <th>Stage reached</th>
+                        <th>Applications</th>
+                        <th>Share of 42</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </details>
+
+        <p class="credit">Visualization technique &mdash; one hand-placed mark per data unit, outcome
+            as distance &mdash; adapted from unit-chart storytelling in the
+            <a href="https://www.informationisbeautifulawards.com/showcase?award=2024" target="_blank"
+                rel="noopener">Information is Beautiful Awards 2024</a> showcase.</p>
+    </div>
+
+    <script>
+        // ---- Data (real, tracked Apr-Jul 2026) -------------------------------
+        const TOTALS = { applied: 42, replies: 11, interviews: 5, offers: 1 };
+
+        const STAGES = [
+            { key: 'none', label: 'No reply', outcome: 'No reply', count: TOTALS.applied - TOTALS.replies, cum: TOTALS.applied, color: '#8B88A0' },
+            { key: 'reply', label: 'Replied', outcome: 'Got a reply · no interview', count: TOTALS.replies - TOTALS.interviews, cum: TOTALS.replies, color: '#6E62C9' },
+            { key: 'interview', label: 'Interviewed', outcome: 'Interviewed · no offer', count: TOTALS.interviews - TOTALS.offers, cum: TOTALS.interviews, color: '#5A3CEC' },
+            { key: 'offer', label: 'Offer', outcome: 'Offer — accepted', count: TOTALS.offers, cum: TOTALS.offers, color: '#4A25FF' }
+        ];
+
+        // ---- Deterministic layout -------------------------------------------
+        // Seeded PRNG so the scene renders identically on every visit.
+        function lcg(seed) {
+            let s = seed;
+            return () => (s = (s * 1664525 + 1013904223) % 4294967296) / 4294967296;
+        }
+
+        const W = 1000, H = 560;
+        const GROUND_Y = 470;
+        const ORIGIN = { x: 78, y: 442 };
+        const ZONES = {
+            none: { x0: 175, x1: 385 },
+            reply: { x0: 445, x1: 630 },
+            interview: { x0: 690, x1: 830 },
+            offer: { x0: 905, x1: 905 }
+        };
+        const ARC = { none: [60, 150], reply: [170, 250], interview: [270, 340], offer: [380, 380] };
+
+        function buildPlanes() {
+            const rand = lcg(20260714);
+            // Interleave stages so trails mix naturally in launch order.
+            const bag = [];
+            STAGES.forEach(s => { for (let i = 0; i < s.count; i++) bag.push(s); });
+            for (let i = bag.length - 1; i > 0; i--) {
+                const j = Math.floor(rand() * (i + 1));
+                [bag[i], bag[j]] = [bag[j], bag[i]];
+            }
+            return bag.map((stage, i) => {
+                const z = ZONES[stage.key], a = ARC[stage.key];
+                const perZone = stage.count > 1 ? (z.x1 - z.x0) / (stage.count - 1) : 0;
+                const nth = bag.slice(0, i).filter(p => p.key === stage.key).length;
+                const endX = stage.count > 1 ? z.x0 + nth * perZone + (rand() - 0.5) * perZone * 0.6 : z.x0;
+                const endY = GROUND_Y - 12 - rand() * 10;
+                const startX = ORIGIN.x + (rand() - 0.5) * 8;
+                const startY = ORIGIN.y + (rand() - 0.5) * 8;
+                const arcH = a[0] + rand() * (a[1] - a[0]);
+                const ctrl = { x: (startX + endX) / 2, y: Math.min(startY, endY) - arcH };
+                return { id: i + 1, stage, startX, startY, endX, endY, ctrl };
+            });
+        }
+
+        // ---- Render ----------------------------------------------------------
+        const NS = 'http://www.w3.org/2000/svg';
+        const svg = document.getElementById('sky-svg');
+        const tooltip = document.getElementById('tooltip');
+
+        function el(name, attrs, parent) {
+            const node = document.createElementNS(NS, name);
+            for (const k in attrs) node.setAttribute(k, attrs[k]);
+            (parent || svg).appendChild(node);
+            return node;
+        }
+
+        function drawScene() {
+            const defs = el('defs', {});
+            const grad = el('linearGradient', { id: 'sky-grad', x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+            el('stop', { offset: '0%', 'stop-color': '#EFEEEA' }, grad);
+            el('stop', { offset: '100%', 'stop-color': '#E4E2DC' }, grad);
+            el('rect', { x: 0, y: 0, width: W, height: H, fill: 'url(#sky-grad)' });
+            el('line', { x1: 0, y1: GROUND_Y, x2: W, y2: GROUND_Y, stroke: '#C9C7C1', 'stroke-width': 2 });
+
+            // Launch pad
+            el('circle', { cx: ORIGIN.x, cy: GROUND_Y, r: 5, fill: '#4A25FF' });
+            const you = el('text', { x: ORIGIN.x, y: GROUND_Y + 26, 'text-anchor': 'middle', 'font-size': 13, fill: '#0B0B0B', 'font-weight': 600 });
+            you.textContent = 'You';
+            const sent = el('text', { x: ORIGIN.x, y: GROUND_Y + 44, 'text-anchor': 'middle', 'font-size': 11, fill: '#8B8A86' });
+            sent.textContent = '42 sent';
+
+            // Zone dividers + labels (direct labels relieve the faint stage color)
+            STAGES.forEach(s => {
+                const z = ZONES[s.key];
+                const mid = (z.x0 + z.x1) / 2;
+                const name = el('text', { x: mid, y: GROUND_Y + 26, 'text-anchor': 'middle', 'font-size': 13, fill: '#0B0B0B', 'font-weight': 600 });
+                name.textContent = s.label;
+                const n = el('text', { x: mid, y: GROUND_Y + 44, 'text-anchor': 'middle', 'font-size': 11, fill: '#8B8A86' });
+                n.textContent = s.count + (s.count === 1 ? ' plane' : ' planes') + ' landed here';
+                if (s.key !== 'offer') el('line', {
+                    x1: z.x1 + 32, y1: GROUND_Y + 8, x2: z.x1 + 32, y2: GROUND_Y + 46,
+                    stroke: '#C9C7C1', 'stroke-width': 1
+                });
+            });
+        }
+
+        function planePath(p) {
+            return `M ${p.startX} ${p.startY} Q ${p.ctrl.x} ${p.ctrl.y} ${p.endX} ${p.endY}`;
+        }
+
+        const PLANE_SHAPE = 'M 9 0 L -8 6 L -4 0 L -8 -6 Z';
+
+        function drawPlanes(planes) {
+            const trailsG = el('g', { id: 'trails' });
+            const planesG = el('g', { id: 'planes' });
+            const hitsG = el('g', { id: 'hits' });
+
+            planes.forEach(p => {
+                const d = planePath(p);
+                p.trail = el('path', {
+                    d, fill: 'none', stroke: p.stage.color, 'stroke-width': 1.6,
+                    opacity: 0.32, 'stroke-linecap': 'round', 'data-zone': p.stage.key
+                }, trailsG);
+
+                // Tangent at the end of the quadratic = end minus control point.
+                const angle = Math.atan2(p.endY - p.ctrl.y, p.endX - p.ctrl.x) * 180 / Math.PI;
+                p.finalTransform = `translate(${p.endX} ${p.endY}) rotate(${angle})`;
+                p.glyph = el('path', {
+                    d: PLANE_SHAPE, fill: p.stage.color, transform: p.finalTransform,
+                    'data-zone': p.stage.key
+                }, planesG);
+                if (p.stage.key === 'offer') {
+                    p.glyph.setAttribute('d', 'M 12 0 L -11 8 L -5.5 0 L -11 -8 Z');
+                }
+
+                const hit = el('path', { d, fill: 'none', stroke: 'transparent', 'stroke-width': 14 }, hitsG);
+                hit.addEventListener('mouseenter', evt => showTip(p, evt));
+                hit.addEventListener('mousemove', evt => moveTip(evt));
+                hit.addEventListener('mouseleave', () => hideTip(p));
+            });
+
+            // Offer flag, drawn above everything
+            const offer = planes.find(p => p.stage.key === 'offer');
+            const fx = offer.endX + 18, fy = GROUND_Y;
+            el('line', { x1: fx, y1: fy, x2: fx, y2: fy - 52, stroke: '#4A25FF', 'stroke-width': 2.5 });
+            el('path', { d: `M ${fx} ${fy - 52} L ${fx + 46} ${fy - 44} L ${fx} ${fy - 36} Z`, fill: '#4A25FF' });
+            const flagText = el('text', { x: fx + 6, y: fy - 41.5, 'font-size': 9.5, fill: '#fff', 'font-weight': 700 });
+            flagText.textContent = 'OFFER';
+        }
+
+        function showTip(p, evt) {
+            tooltip.textContent = `Application #${p.id} · ${p.stage.outcome}`;
+            tooltip.classList.add('on');
+            p.trail.setAttribute('opacity', 1);
+            p.trail.setAttribute('stroke-width', 2.6);
+            moveTip(evt);
+        }
+
+        function moveTip(evt) {
+            const box = svg.parentElement.getBoundingClientRect();
+            tooltip.style.left = (evt.clientX - box.left) + 'px';
+            tooltip.style.top = (evt.clientY - box.top) + 'px';
+        }
+
+        function hideTip(p) {
+            tooltip.classList.remove('on');
+            p.trail.setAttribute('opacity', 0.32);
+            p.trail.setAttribute('stroke-width', 1.6);
+        }
+
+        // ---- Launch animation ------------------------------------------------
+        function animate(planes) {
+            const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduced) return;
+            const FLIGHT = 900, STAGGER = 55;
+            planes.forEach((p, i) => {
+                const len = p.trail.getTotalLength();
+                p.trail.style.strokeDasharray = len;
+                p.trail.style.strokeDashoffset = len;
+                p.glyph.setAttribute('opacity', 0);
+                const t0 = performance.now() + i * STAGGER;
+                function frame(now) {
+                    const t = Math.min(1, Math.max(0, (now - t0) / FLIGHT));
+                    const eased = 1 - Math.pow(1 - t, 2.2);
+                    p.trail.style.strokeDashoffset = len * (1 - eased);
+                    if (t > 0) {
+                        p.glyph.setAttribute('opacity', 1);
+                        const pt = p.trail.getPointAtLength(len * eased);
+                        const ahead = p.trail.getPointAtLength(Math.min(len, len * eased + 1));
+                        const ang = Math.atan2(ahead.y - pt.y, ahead.x - pt.x) * 180 / Math.PI;
+                        p.glyph.setAttribute('transform', `translate(${pt.x} ${pt.y}) rotate(${ang})`);
+                    }
+                    if (t < 1) requestAnimationFrame(frame);
+                    else p.glyph.setAttribute('transform', p.finalTransform);
+                }
+                requestAnimationFrame(frame);
+            });
+        }
+
+        // ---- Stat strip + table ----------------------------------------------
+        function drawStats() {
+            const strip = document.getElementById('stat-strip');
+            const steps = [
+                { n: TOTALS.applied, lbl: 'Applications sent', pct: '', color: '#8B88A0' },
+                { n: TOTALS.replies, lbl: 'Replies', pct: Math.round(TOTALS.replies / TOTALS.applied * 100) + '% of sent', color: '#6E62C9' },
+                { n: TOTALS.interviews, lbl: 'Interviews', pct: Math.round(TOTALS.interviews / TOTALS.applied * 100) + '% of sent', color: '#5A3CEC' },
+                { n: TOTALS.offers, lbl: 'Offer', pct: Math.round(TOTALS.offers / TOTALS.applied * 10000) / 100 + '% of sent', color: '#4A25FF' }
+            ];
+            strip.innerHTML = steps.map(s => `
+                <div class="stat-tile">
+                    <div class="num"><span class="swatch" style="background:${s.color}"></span>${s.n}</div>
+                    <div class="lbl">${s.lbl}</div>
+                    <div class="pct">${s.pct || ' '}</div>
+                </div>`).join('');
+
+            const tbody = document.querySelector('#outcome-table tbody');
+            tbody.innerHTML = STAGES.map(s => `
+                <tr>
+                    <td>${s.outcome}</td>
+                    <td>${s.count}</td>
+                    <td>${Math.round(s.count / TOTALS.applied * 100)}%</td>
+                </tr>`).join('') +
+                `<tr><th>Total</th><th>${TOTALS.applied}</th><th>100%</th></tr>`;
+        }
+
+        drawScene();
+        const planes = buildPlanes();
+        drawPlanes(planes);
+        drawStats();
+        animate(planes);
+        window.PLANES = planes; // exposed for automated verification
+    </script>
+</body>
+
+</html>

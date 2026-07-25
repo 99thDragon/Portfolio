@@ -4,184 +4,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Portfolio | Erasmo Concepcion</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Erasmo Concepcion — AI Builder</title>
+    <meta name="description"
+        content="Erasmo Concepcion — AI builder & Pursuit Fellow in NYC. I build AI that gives people back something they lost or never had access to. VoiceKeeper, AdScale, NarrateMe and more.">
+    <meta name="author" content="Erasmo Concepcion">
+    <meta name="theme-color" content="#4A25FF">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Erasmo Concepcion — AI Builder">
+    <meta property="og:description"
+        content="I build AI that gives people back what they lost. Pursuit Fellow · NYC.">
+    <meta property="og:image" content="assets/images/Avatar.jpg">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Erasmo Concepcion — AI Builder">
+    <meta name="twitter:description" content="I build AI that gives people back what they lost.">
+
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23E9E7E2'/%3E%3Ctext x='50' y='72' font-family='Arial,sans-serif' font-size='62' font-weight='800' fill='%234A25FF' text-anchor='middle'%3EE%3C/text%3E%3Ccircle cx='82' cy='24' r='9' fill='%234A25FF'/%3E%3C/svg%3E">
+
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
 
 <body>
-    <!-- Custom Cursor Glow -->
-    <div class="cursor-glow"></div>
+    <a class="skip-link" href="#work">Skip to content</a>
 
-    <!-- Neural Network Canvas -->
-    <canvas id="particles-canvas"></canvas>
+    <!-- ===== Preloader: counter that fills to 100 while the page loads ===== -->
+    <div class="preloader" id="preloader" aria-hidden="true">
+        <div class="preloader__inner">
+            <span class="preloader__meta ttu">Loading the story</span>
+            <div class="preloader__count-row">
+                <span class="preloader__count" id="preloader-count">00</span>
+                <span class="preloader__total">%</span>
+            </div>
+        </div>
+    </div>
 
-    <!-- Navigation -->
-    <nav id="navbar">
-        <div class="container">
-            <div class="logo">Erasmo Concepcion</div>
-            <ul>
-                <li><a href="#hero">Home</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+    <!-- ===== Header ===== -->
+    <header class="site-header" id="site-header">
+        <a class="brand" href="#top" data-cursor-label="Top">
+            <span class="brand__dot"></span>Erasmo Concepcion
+        </a>
+        <span class="studio-clock" id="studio-clock" aria-label="New York studio hours"></span>
+        <button class="menu-btn" id="menu-btn" aria-label="Open menu">
+            <span class="menu-btn__label ttu">Menu</span>
+            <span class="menu-btn__glyph"></span>
+        </button>
+    </header>
+
+    <main id="top">
+
+        <!-- ===== Hero ===== -->
+        <section class="hero" id="hero">
+            <p class="eyebrow"><span class="dot"></span>AI Builder <i class="slash"></i> Pursuit Fellow <i
+                    class="slash"></i> New York</p>
+            <h1 class="hero__title" data-reveal>I build AI that gives people back what they lost.</h1>
+            <div class="hero__foot">
+                <p class="hero__sub" data-reveal>Educator and marketer turned AI builder — I make tools for the people
+                    technology usually forgets.</p>
+                <a class="scroll-cue" href="#thread" aria-label="Scroll to start">
+                    <span class="ttu small">Scroll</span>
+                    <span class="scroll-cue__line"></span>
+                </a>
+            </div>
+        </section>
+
+        <!-- ===== The Thread (dark chapter) ===== -->
+        <section class="thread" id="thread">
+            <p class="section-label ttu"><span class="dot"></span>The Thread</p>
+            <p class="thread__lead" data-reveal>A tutor, then a marketer, now an AI builder. The title keeps
+                changing — the through-line never has. It has always been people.</p>
+            <blockquote class="pullquote" data-reveal>How do we build AI that actually responds to who someone is?</blockquote>
+            <p class="thread__note ttu small">— Research interest, 2026</p>
+        </section>
+
+        <!-- ===== Selected Work ===== -->
+        <section class="work" id="work">
+            <div class="work__head">
+                <p class="section-label ttu"><span class="dot"></span>Selected Work</p>
+                <p class="section-index ttu small">Six of many <i class="slash"></i> 2025—26</p>
+            </div>
+
+            <ol class="work__list">
+                <!-- 01 — VoiceKeeper (lead) -->
+                <li class="work__item work__item--lead" data-cursor-label="View on GitHub">
+                    <a class="work__link" href="https://github.com/99thDragon/VoiceKeeper" target="_blank"
+                        rel="noopener">
+                        <span class="work__idx ttu small">01</span>
+                        <div class="work__body">
+                            <h3 class="work__title" data-reveal>VoiceKeeper</h3>
+                            <p class="work__desc">Reconstructs a person's voice from a few old video clips — built for
+                                people who've lost their ability to speak to ALS, cancer, or injury. Give someone back
+                                the sound of themselves.</p>
+                            <p class="work__tags ttu small">TypeScript <i class="slash"></i> FastAPI <i
+                                    class="slash"></i> PyTorch <i class="slash"></i> XTTS v2</p>
+                        </div>
+                        <div class="work__eq" id="voice-eq" aria-hidden="true"></div>
+                    </a>
+                </li>
+
+                <!-- 02 — AdScale -->
+                <li class="work__item" data-cursor-label="Live demo">
+                    <a class="work__link" href="https://adscale-99th-dragon.vercel.app" target="_blank" rel="noopener">
+                        <span class="work__idx ttu small">02</span>
+                        <div class="work__body">
+                            <h3 class="work__title" data-reveal>AdScale AI</h3>
+                            <p class="work__desc">Describe a campaign in one sentence; a Claude agent drafts the
+                                audience, budget split, and copy, then waits for your approval before launching through
+                                the platform's real API.</p>
+                            <p class="work__tags ttu small">Claude Agent <i class="slash"></i> FastAPI <i
+                                    class="slash"></i> Ads API</p>
+                        </div>
+                        <span class="work__flag ttu small">Live</span>
+                    </a>
+                </li>
+
+                <!-- 03 — NarrateMe -->
+                <li class="work__item" data-cursor-label="Live demo">
+                    <a class="work__link" href="https://narrateme.vercel.app" target="_blank" rel="noopener">
+                        <span class="work__idx ttu small">03</span>
+                        <div class="work__body">
+                            <h3 class="work__title" data-reveal>NarrateMe</h3>
+                            <p class="work__desc">Turns any written story into a narrated, illustrated, multi-scene
+                                presentation in under a minute — for teachers and parents of kids in grades 1–3.</p>
+                            <p class="work__tags ttu small">LLM Pipeline <i class="slash"></i> Image Gen <i
+                                    class="slash"></i> Text-to-Speech</p>
+                        </div>
+                        <span class="work__flag ttu small">Live</span>
+                    </a>
+                </li>
+
+                <!-- 04 — Morning Briefing Agent -->
+                <li class="work__item" data-cursor-label="View on GitHub">
+                    <a class="work__link" href="https://github.com/99thDragon/morning-briefing-agent" target="_blank"
+                        rel="noopener">
+                        <span class="work__idx ttu small">04</span>
+                        <div class="work__body">
+                            <h3 class="work__title" data-reveal>Morning Briefing Agent</h3>
+                            <p class="work__desc">A tool-using agent that reads Gmail, Calendar, and Slack, then
+                                synthesizes one prioritized briefing — deciding each next step on its own.</p>
+                            <p class="work__tags ttu small">Strands Agents <i class="slash"></i> LiteLLM <i
+                                    class="slash"></i> Python</p>
+                        </div>
+                    </a>
+                </li>
+
+                <!-- 05 — Market Pulse -->
+                <li class="work__item" data-cursor-label="View on GitHub">
+                    <a class="work__link" href="https://github.com/99thDragon/market-pulse" target="_blank"
+                        rel="noopener">
+                        <span class="work__idx ttu small">05</span>
+                        <div class="work__body">
+                            <h3 class="work__title" data-reveal>Market Pulse</h3>
+                            <p class="work__desc">An AI agent that turns scattered marketing-channel data into a single
+                                explained weekly report — the manual Monday-morning reconciliation, automated.</p>
+                            <p class="work__tags ttu small">TypeScript <i class="slash"></i> FastAPI <i
+                                    class="slash"></i> Agent</p>
+                        </div>
+                    </a>
+                </li>
+
+                <!-- 06 — Email Sorter -->
+                <li class="work__item" data-cursor-label="View on GitHub">
+                    <a class="work__link" href="https://github.com/99thDragon/email-sorter" target="_blank"
+                        rel="noopener">
+                        <span class="work__idx ttu small">06</span>
+                        <div class="work__body">
+                            <h3 class="work__title" data-reveal>Email Sorter</h3>
+                            <p class="work__desc">A browser extension that sorts your inbox by urgency with a local AI
+                                model — nothing leaves your machine. Privacy-first triage for people drowning in
+                                email.</p>
+                            <p class="work__tags ttu small">Chrome Extension <i class="slash"></i> Ollama <i
+                                    class="slash"></i> Local AI</p>
+                        </div>
+                    </a>
+                </li>
+            </ol>
+        </section>
+
+        <!-- ===== The Road Here — 42 Paper Planes ===== -->
+        <section class="road" id="road">
+            <a class="road__card" href="job-search.html" data-cursor-label="Open the story">
+                <div class="road__text">
+                    <p class="section-label ttu"><span class="dot"></span>The Road Here</p>
+                    <h2 class="road__title" data-reveal>42 Paper Planes</h2>
+                    <p class="road__desc">The job search that led to Pursuit, told as data: 42 applications folded into
+                        paper planes, each flying as far as it got. One landed. An interactive piece, hand-built in
+                        SVG.</p>
+                    <span class="road__link ttu small">Open the visualization →</span>
+                </div>
+                <div class="road__stats" aria-hidden="true">
+                    <div class="rstat"><b>42</b><span class="ttu small">Sent</span></div>
+                    <div class="rstat"><b>11</b><span class="ttu small">Replies</span></div>
+                    <div class="rstat"><b>5</b><span class="ttu small">Interviews</span></div>
+                    <div class="rstat rstat--hit"><b>1</b><span class="ttu small">Offer</span></div>
+                </div>
+            </a>
+        </section>
+
+        <!-- ===== About ===== -->
+        <section class="about" id="about">
+            <div class="about__portrait acetate-host">
+                <img src="assets/images/Avatar.jpg" alt="Portrait of Erasmo Concepcion" width="200" height="300"
+                    loading="lazy" decoding="async">
+                <span class="acetate acetate--hover" aria-hidden="true"></span>
+            </div>
+            <div class="about__body">
+                <p class="section-label ttu"><span class="dot"></span>Who</p>
+                <p class="about__lead" data-reveal>I'm an AI builder and Pursuit Fellow in New York, with a background
+                    in marketing, education, and human-centered design.</p>
+                <p class="about__text">Before AI, I spent years as a tutor — learning to read a person quickly and meet
+                    them exactly where they are. That instinct is the whole point of my work now: tools that adapt to
+                    who someone is, especially when the stakes are high and existing technology has left them behind.
+                    I'm training in a selective AI-Native program backed by Amazon and Google, and building in public.</p>
+                <p class="about__meta ttu small">Pursuit Fellow <i class="slash"></i> Baruch, Marketing <i
+                        class="slash"></i> Based in NYC</p>
+            </div>
+        </section>
+
+        <!-- ===== Contact ===== -->
+        <section class="contact" id="contact">
+            <p class="section-label ttu"><span class="dot"></span>Get in touch</p>
+            <a class="contact__mail" href="mailto:erasmo.concepcion@pursuit.org" data-cursor-label="Say hello"
+                data-reveal>erasmo.concepcion@pursuit.org</a>
+            <ul class="contact__links ttu small">
+                <li><a href="https://github.com/99thDragon" target="_blank" rel="noopener"
+                        data-cursor-label="GitHub"><span class="dot"></span>GitHub — 99thDragon</a></li>
+                <li><a href="https://www.linkedin.com/in/erasmoconcepcion/" target="_blank" rel="noopener"
+                        data-cursor-label="LinkedIn"><span class="dot"></span>LinkedIn</a></li>
             </ul>
-        </div>
-    </nav>
+        </section>
+    </main>
 
-    <!-- Hero Section -->
-    <section id="hero">
-        <div class="hero-content">
-            <h1>AI-Native Developer</h1>
-            <div class="typing-text" id="typing-text"></div>
-            <span class="cursor"></span>
-        </div>
-    </section>
+    <!-- ===== Footer ===== -->
+    <footer class="site-footer">
+        <span class="ttu small">© 2026 Erasmo Concepcion</span>
+        <span class="ttu small">Built in public <i class="slash"></i> Motion from my own <a
+                href="https://github.com/99thDragon/ui-animation-library" target="_blank"
+                rel="noopener">animation library</a></span>
+        <a class="ttu small footer__top" href="#top">Back to top ↑</a>
+    </footer>
 
-    <!-- Projects Section with Card Stacking -->
-    <div class="card-stack-section" id="projects">
-        <h2 class="section-title">Featured Projects</h2>
-        <div class="card-container" id="project-cards">
-            <div class="sticky-wrapper">
-                <div class="project-card-stack" data-index="0">
-                    <div class="card-image ai-content">
-                        <canvas class="card-canvas" data-type="neural"></canvas>
-                    </div>
-                    <div class="card-content">
-                        <h3>AI Content Generator</h3>
-                        <p>Automated content creation tool using GPT-4 API for marketing teams. Generates blog posts,
-                            social media content, and email campaigns with advanced prompt engineering.</p>
-                        <div class="card-tech-tags">
-                            <span class="tech-tag">GPT-4 API</span>
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">Flask</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card-stack" data-index="1">
-                    <div class="card-image document">
-                        <canvas class="card-canvas" data-type="matrix"></canvas>
-                    </div>
-                    <div class="card-content">
-                        <h3>Smart Document Analyzer</h3>
-                        <p>AI-powered document processing system that extracts insights from PDFs and reports using
-                            Claude API and custom prompts for intelligent data extraction.</p>
-                        <div class="card-tech-tags">
-                            <span class="tech-tag">Claude API</span>
-                            <span class="tech-tag">LangChain</span>
-                            <span class="tech-tag">React</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card-stack" data-index="2">
-                    <div class="card-image chatbot">
-                        <canvas class="card-canvas" data-type="waves"></canvas>
-                    </div>
-                    <div class="card-content">
-                        <h3>Chatbot Assistant</h3>
-                        <p>Custom AI chatbot for customer service with context awareness and multi-language support.
-                            Built with LangChain for memory management and conversation flow.</p>
-                        <div class="card-tech-tags">
-                            <span class="tech-tag">LangChain</span>
-                            <span class="tech-tag">OpenAI</span>
-                            <span class="tech-tag">Node.js</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card-stack" data-index="3">
-                    <div class="card-image code">
-                        <canvas class="card-canvas" data-type="binary"></canvas>
-                    </div>
-                    <div class="card-content">
-                        <h3>Code Review Assistant</h3>
-                        <p>AI tool that analyzes code quality, suggests improvements, and identifies bugs using advanced
-                            prompt engineering techniques and GPT-4 code understanding.</p>
-                        <div class="card-tech-tags">
-                            <span class="tech-tag">GPT-4</span>
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">GitHub API</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Skills Section with Card Stacking - REBUILT -->
-    <div class="card-stack-section" id="skills" style="background: linear-gradient(180deg, #fff5e6 0%, #ffe8cc 100%);">
-        <h2 class="section-title">AI Skills & Expertise</h2>
-        <div class="skills-stack-container" id="skills-cards">
-            <div class="sticky-wrapper">
-                <!-- Skill Card 1: Prompt Engineering -->
-                <div class="skill-card-stack" data-index="0">
-                    <canvas class="skill-canvas" data-skill="prompt"></canvas>
-                    <div class="skill-text-content">
-                        <h3>Prompt Engineering</h3>
-                        <p>Expert in crafting precise prompts for GPT-4, Claude, and other LLMs. Specializing in
-                            few-shot learning, chain-of-thought reasoning, and context optimization.</p>
-                    </div>
-                </div>
-
-                <!-- Skill Card 2: AI Frameworks -->
-                <div class="skill-card-stack" data-index="1">
-                    <canvas class="skill-canvas" data-skill="langchain"></canvas>
-                    <div class="skill-text-content">
-                        <h3>AI Frameworks</h3>
-                        <p>Building complex AI applications with LangChain, managing conversation memory, document
-                            loaders, and creating custom chains for specialized tasks.</p>
-                    </div>
-                </div>
-
-                <!-- Skill Card 3: API Integration -->
-                <div class="skill-card-stack" data-index="2">
-                    <canvas class="skill-canvas" data-skill="api"></canvas>
-                    <div class="skill-text-content">
-                        <h3>API Integration</h3>
-                        <p>Seamless integration of OpenAI, Anthropic, and other AI APIs. Experience with rate limiting,
-                            token optimization, and cost-effective API usage patterns.</p>
-                    </div>
-                </div>
-
-                <!-- Skill Card 4: Python for AI -->
-                <div class="skill-card-stack" data-index="3">
-                    <canvas class="skill-canvas" data-skill="python"></canvas>
-                    <div class="skill-text-content">
-                        <h3>Python for AI</h3>
-                        <p>Proficient in Python libraries for AI development including TensorFlow, PyTorch, NumPy, and
-                            Pandas. Building production-ready AI applications.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- About Section -->
-    <section id="about">
-        <div class="container">
-            <h2>About Me</h2>
-            <div class="about-content">
-                <img src="assets/images/Avatar.png" alt="Erasmo Concepcion" class="about-avatar">
-                <p>I'm an AI-native developer passionate about leveraging artificial intelligence to solve real-world
-                    problems. I specialize in building intelligent applications that enhance productivity and automate
-                    complex workflows using cutting-edge AI technologies.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
-        <div class="container">
-            <h2>Get In Touch</h2>
-            <div class="contact-info">
-                <p><strong>Email:</strong> <a
-                        href="mailto:erasmo.concepcion@pursuit.org">erasmo.concepcion@pursuit.org</a></p>
-                <p><strong>LinkedIn:</strong> <a
-                        href="https://www.linkedin.com/in/erasmoconcepcion/">/in/erasmoconcepcion</a></p>
-            </div>
-        </div>
-    </section>
-
-    <script src="js/main.js"></script>
+    <!-- GSAP + Lenis (progressive enhancement; site is fully readable without them) -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="js/main.js?v=5"></script>
 </body>
 
 </html>
