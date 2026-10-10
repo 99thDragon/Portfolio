@@ -245,6 +245,8 @@
             <div class="about__portrait acetate-host">
                 <img src="assets/images/art-portrait.jpg" alt="Erasmo Concepcion drawn in anime style at his studio desk, made with his own ComfyUI pipeline" width="200" height="300"
                     loading="lazy" decoding="async">
+                <video class="about__video" src="assets/video/ras-portrait-loop.mp4" poster="assets/images/art-portrait.jpg"
+                    muted loop playsinline preload="none" aria-hidden="true"></video>
                 <span class="acetate acetate--hover" aria-hidden="true"></span>
             </div>
             <div class="about__body">
@@ -290,6 +292,20 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     <script src="js/main.js?v=5"></script>
+    <script>
+        /* About portrait: play my ComfyUI (Kling) idle loop on hover, or when in view on touch screens */
+        (function () {
+            var h = document.querySelector('.about__portrait'), v = h && h.querySelector('.about__video');
+            if (!v || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            function on() { h.classList.add('is-playing'); var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+            function off() { h.classList.remove('is-playing'); v.pause(); }
+            if (window.matchMedia('(hover: hover)').matches) {
+                h.addEventListener('mouseenter', on); h.addEventListener('mouseleave', off);
+            } else if ('IntersectionObserver' in window) {
+                new IntersectionObserver(function (es) { es.forEach(function (e) { e.isIntersecting ? on() : off(); }); }, { threshold: 0.6 }).observe(h);
+            }
+        })();
+    </script>
 </body>
 
 </html>
