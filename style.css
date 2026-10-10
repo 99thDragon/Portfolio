@@ -1027,3 +1027,23 @@ a {
         margin: 0;
     }
 }
+
+/* About portrait: ComfyUI (Kling) idle loop, shown on hover */
+.about__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%;
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-out);
+}
+
+.about__portrait.is-playing .about__video {
+    opacity: 1;
+}
+
+.about__portrait.is-playing .acetate--hover {
+    opacity: 0;
+}
